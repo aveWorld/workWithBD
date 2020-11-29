@@ -99,26 +99,9 @@ app.get("/data", async(request, response) => {
 
 app.get("/sort", async(request, response) => {
   let data = {}
-  let prop_name = request.query.sort_name
   if(request.query.name === 'countries') {
-    data = await Countries.find().sort({ [prop_name]: request.query.sort_by_asc })
-  } else if(request.query.name === 'stadiums') {
-    data = await Stadiums.find().sort({ [prop_name]: request.query.sort_by_asc })
-  } else if(request.query.name === 'matches') {
-    data = await Matches.find().sort({ [prop_name]: request.query.sort_by_asc })
-  }
-  response.send(data)
-})
-
-app.get("/filter", async(request, response) => {
-  let data = {}
-  let prop_name = request.query.sort_name
-  if(request.query.name === 'countries') {
-    data = await Countries.find({[prop_name] : request.query.input})
-  } else if(request.query.name === 'stadiums') {
-    data = await Stadiums.find({[prop_name] : request.query.input})
-  } else if(request.query.name === 'matches') {
-    data = await Matches.find({[prop_name] : request.query.input})
+    let name = request.query.sort_name
+    data = await Countries.find().sort({ name: request.query.sort_by_asc })
   }
   response.send(data)
 })

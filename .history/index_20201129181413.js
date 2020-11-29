@@ -110,19 +110,6 @@ app.get("/sort", async(request, response) => {
   response.send(data)
 })
 
-app.get("/filter", async(request, response) => {
-  let data = {}
-  let prop_name = request.query.sort_name
-  if(request.query.name === 'countries') {
-    data = await Countries.find({[prop_name] : request.query.input})
-  } else if(request.query.name === 'stadiums') {
-    data = await Stadiums.find({[prop_name] : request.query.input})
-  } else if(request.query.name === 'matches') {
-    data = await Matches.find({[prop_name] : request.query.input})
-  }
-  response.send(data)
-})
-
 
 
 app.listen(port, () => {
