@@ -1,10 +1,14 @@
 const express = require('express');
 const app = express();
+const axios = require('axios');
 const port = 3000;
 
 const Teams = require('./models/Teams');
 const Players = require('./models/Players');
 const Equipments = require('./models/Equipments');
+const Countries = require('./models/Countries');
+const Stadiums = require('./models/Stadiums');
+const Matches = require('./models/Matches');
 
 (async function () {
   const teamsData = [
@@ -60,18 +64,62 @@ const Equipments = require('./models/Equipments');
       equipment: ['dark shirt', 'yellow shoes'],
     },
   ];
-  await Players.insertMany(playersData);
-  console.log('data has been inserted to Players DB');
-  await Teams.insertMany(teamsData);
-  console.log('data has been inserted to Teams DB');
-  await Equipments.insertMany(equipmentData);
-  console.log('data has been inserted to Equipment DB:');
+  // await Players.insertMany(playersData);
+  // console.log('data has been inserted to Players DB');
+  // await Teams.insertMany(teamsData);
+  // console.log('data has been inserted to Teams DB');
+  // await Equipments.insertMany(equipmentData);
+  // console.log('data has been inserted to Equipment DB:');
 })();
 
 require('./db');
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
+app.get('/', function (req, res) {
+  res.sendFile(__dirname + '/index.html');
+});
+
+app.get('/data', async (request, response) => {
+  const data = {
+    countries: await Countries.find(),
+    stadiums: await Stadiums.find(),
+    matches: await Matches.find(),
+  };
+  // await Stadiums.find(
+  //   // { countryName: 'Ukraine' }
+  // )
+  response.send(data);
+});
+
+app.get('/sort', async (request, response) => {
+  let data = {};
+  let prop_name = request.query.sort_name;
+  if (request.query.name === 'countries') {
+    data = await Countries.find().sort({
+      [prop_name]: request.query.sort_by_asc,
+    });
+  } else if (request.query.name === 'stadiums') {
+    data = await Stadiums.find().sort({
+      [prop_name]: request.query.sort_by_asc,
+    });
+  } else if (request.query.name === 'matches') {
+    data = await Matches.find().sort({
+      [prop_name]: request.query.sort_by_asc,
+    });
+  }
+  response.send(data);
+});
+
+app.get('/filter', async (request, response) => {
+  let data = {};
+  let prop_name = request.query.sort_name;
+  if (request.query.name === 'countries') {
+    data = await Countries.find({ [prop_name]: request.query.input });
+  } else if (request.query.name === 'stadiums') {
+    data = await Stadiums.find({ [prop_name]: request.query.input });
+  } else if (request.query.name === 'matches') {
+    data = await Matches.find({ [prop_name]: request.query.input });
+  }
+  response.send(data);
 });
 
 app.listen(port, () => {

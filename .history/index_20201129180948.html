@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 1</title>
+    <style>
+        table {
+            margin-bottom: 20px;
+            width: 100%;
+            text-align: left;
+            border-top: 2px solid #000000;
+            border-bottom: 2px solid #000000;
+        }
+        thead th {
+            font-size: 24px;
+            border-bottom: 1px solid rgba(0,0,0,0.5);
+        }
+        th, td {
+            padding: 10px 30px;
+            border-right: 2px solid #000000;
+            border-left: 2px solid #000000;
+        }
+        button {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app_basic">
+        <!-- <h1>{{stadium.name}}</h1> -->
+        <table>
+            <thead>
+                <th>
+                    <span>Name</span>
+                    <button @click="sort('countries', 'name', 1)">Asc</button><button @click="sort('countries', 'name', -1)">Desc</button>
+                </th>
+            </thead>
+            <tbody>
+                <tr v-for="country in table.data.countries">
+                    <td>{{country.name}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        <span>StadiumNames</span>
+                        <button @click="sort('matches', 'stadiumNames', 1)">Asc</button><button @click="sort('matches', 'stadiumNames', -1)">Desc</button>
+                    </th>
+                    <th>
+                        <span>MatchName</span>
+                        <button @click="sort('matches', 'matchName', 1)">Asc</button><button @click="sort('matches', 'matchName', -1)">Desc</button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="match in table.data.matches">
+                    <td>{{match.stadiumNames}}</td>
+                    <td>{{match.matchName}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        <span>Matches</span>
+                        <button @click="sort('stadiums', 'matches', 1)">Asc</button><button @click="sort('stadiums', 'matches', -1)">Desc</button>
+                    </th>
+                    <th>
+                        <span>StadiumName</span>
+                        <button @click="sort('stadiums', 'stadiumName', 1)">Asc</button><button @click="sort('stadiums', 'stadiumName', -1)">Desc</button>
+                    </th>
+                    <th>
+                        <span>CountryName</span>
+                        <button @click="sort('stadiums', 'countryName', 1)">Asc</button><button @click="sort('stadiums', 'countryName', -1)">Desc</button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="stadium in table.data.stadiums">
+                    <td>{{stadium.matches}}</td>
+                    <td>{{stadium.stadiumName}}</td>
+                    <td>{{stadium.countryName}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        new Vue(
+        {
+            el: '#app_basic',
+            data: {
+                table: {}
+            },
+            async created() {
+                this.table = await axios.get('http://localhost:3000/data')
+            },
+            methods: {
+                async sort(table_name, sort_name, asc) {
+                    const response = await axios.get(`http://localhost:3000/sort?name=${table_name}&sort_name=${sort_name}&sort_by_asc=${asc}`)
+                    this.table.data.countries = response.data
+                }
+            }
+        })
+    </script>
+</body>
+</html>
