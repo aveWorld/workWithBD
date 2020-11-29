@@ -9,6 +9,7 @@ const Equipments = require('./models/Equipments');
 const Countries = require('./models/Countries');
 const Stadiums = require('./models/Stadiums');
 const Matches = require('./models/Matches');
+const { request } = require('express');
 
 (async function () {
   const teamsData = [
@@ -120,6 +121,18 @@ app.get('/filter', async (request, response) => {
     data = await Matches.find({ [prop_name]: request.query.input });
   }
   response.send(data);
+});
+
+app.get('/delete', async (request, response) => {
+  let prop_name = request.query.prop;
+  if (request.query.name === 'countries') {
+    await Countries.remove({ [prop_name]: request.query.data });
+  } else if (request.query.name === 'stadiums') {
+    await Stadiums.remove({ [prop_name]: request.query.data });
+  } else if (request.query.name === 'matches') {
+    await Matches.remove({ [prop_name]: request.query.data });
+  }
+  console.log(request.query);
 });
 
 app.listen(port, () => {
