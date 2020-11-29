@@ -146,6 +146,24 @@ app.get('/insert', async (request, response) => {
   Countries.insertMany({ name: countryName });
 });
 
+app.get('/edit', async (request, response) => {
+  console.log(request.query);
+  let newName = request.query.name;
+  let oldName = request.query.old_name;
+  Countries.findOneAndUpdate(
+    { name: oldName },
+    { $set: { name: newName } },
+    { new: true },
+    (err, doc) => {
+      if (err) {
+        console.log('Something wrong when updating data!');
+      }
+
+      console.log(doc);
+    }
+  );
+});
+
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
 });
