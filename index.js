@@ -71,12 +71,12 @@ const { request } = require('express');
       matches: [],
     },
   ];
-  await Countries.insertMany(countriesData);
-  console.log('data has been inserted to Country DB');
-  await Stadiums.insertMany(stadiumsData);
-  console.log('data has been inserted to Stadiums DB');
-  await Matches.insertMany(matchesData);
-  console.log('data has been inserted to Matches DB:');
+  // await Countries.insertMany(countriesData);
+  // console.log('data has been inserted to Country DB');
+  // await Stadiums.insertMany(stadiumsData);
+  // console.log('data has been inserted to Stadiums DB');
+  // await Matches.insertMany(matchesData);
+  // console.log('data has been inserted to Matches DB:');
 })();
 
 require('./db');
@@ -142,14 +142,8 @@ app.get('/delete', async (request, response) => {
 });
 
 app.get('/insert', async (request, response) => {
-  if (request.query.name === 'countries') {
-    await Countries.remove({ [prop_name]: request.query.data });
-  } else if (request.query.name === 'stadiums') {
-    await Stadiums.remove({ [prop_name]: request.query.data });
-  } else if (request.query.name === 'matches') {
-    await Matches.remove({ [prop_name]: request.query.data });
-  }
-  console.log(request.query);
+  let countryName = request.query.name[1];
+  Countries.insertMany({ name: countryName });
 });
 
 app.listen(port, () => {
