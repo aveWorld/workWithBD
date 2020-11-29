@@ -187,7 +187,7 @@
                     
                 },
                 async deleteProp(table_name, prop, data, index) {
-                    this.table.data[table_name].splice(index, 1)
+                    table.data[table_name].splice(index, 1)
                     const response = await axios.get(`http://localhost:3000/delete?name=${table_name}&prop=${prop}&data=${data}`)
                 }
             }

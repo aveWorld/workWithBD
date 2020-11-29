@@ -41,6 +41,7 @@
 </head>
 <body>
     <div id="app_basic">
+        <!-- <h1>{{stadium.name}}</h1> -->
         <table>
             <thead>
                 <th>
@@ -52,11 +53,11 @@
                 </th>
             </thead>
             <tbody>
-                <tr v-for="(country, index) in table.data.countries">
+                <tr v-for="country in table.data.countries">
                     <td>
                         <span>{{country.name}}</span>
                         <button @click="editProp()" class="edit_btns">Edit</button>
-                        <button @click="deleteProp('countries', 'name', country.name, index)" class="edit_btns">-</button>
+                        <button @click="deleteProp()" class="edit_btns">-</button>
                     </td>
                 </tr>
             </tbody>
@@ -186,9 +187,8 @@
                 async addProp() {
                     
                 },
-                async deleteProp(table_name, prop, data, index) {
-                    this.table.data[table_name].splice(index, 1)
-                    const response = await axios.get(`http://localhost:3000/delete?name=${table_name}&prop=${prop}&data=${data}`)
+                async deleteProp() {
+
                 }
             }
         })
