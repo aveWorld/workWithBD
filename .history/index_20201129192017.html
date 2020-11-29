@@ -48,6 +48,7 @@
                     <button @click="sort('countries', 'name', 1)">Asc</button><button @click="sort('countries', 'name', -1)">Desc</button>
                     <input type="text" v-model="inputs[0]">
                     <button @click="filter('countries', 'name', 0)">Filter</button>
+                    <button @click="addProp()">+</button>
                 </th>
             </thead>
             <tbody>
@@ -60,10 +61,6 @@
                 </tr>
             </tbody>
         </table>
-        <div style="text-align: center; margin-bottom: 20px;">
-            <input type="text" v-model="insert_inputs">
-            <button @click="addProp('countries')">+</button>
-        </div>
 
         <table>
             <thead>
@@ -98,6 +95,8 @@
                 </tr>
             </tbody>
         </table>
+        <input type="text" v-model="insert_inputs[0]">
+        <button @click="addProp('matches')">+</button>
 
         <table>
             <thead>
@@ -153,7 +152,7 @@
             data: {
                 table: {},
                 inputs: [],
-                insert_inputs: ''
+                insert_inputs: []
             },
             async created() {
                 this.table = await axios.get('http://localhost:3000/data')
@@ -186,9 +185,8 @@
                 async editProp() {
 
                 },
-                async addProp(table_name) {
-                    this.table.data[table_name].push({name: this.insert_inputs})
-                    const response = await axios.get(`http://localhost:3000/insert?name=${table_name}&name=${this.insert_inputs}`)
+                async addProp() {
+                    
                 },
                 async deleteProp(table_name, prop, data, index) {
                     this.table.data[table_name].splice(index, 1)
