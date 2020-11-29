@@ -12,65 +12,71 @@ const Matches = require('./models/Matches');
 const { request } = require('express');
 
 (async function () {
-  const teamsData = [
-    { teamName: 'Dynamo Kyiv' },
-    { teamName: 'Barselona' },
-    { teamName: 'Bavaria' },
+  const countriesData = [
+    { name: 'Ukraine' },
+    { name: 'Spain' },
+    { name: 'Germany' },
   ];
-  const playersData = [
+  const matchesData = [
     {
-      playerName: 'Ronaldo',
-      teamName: 'Bavaria',
+      matchName: 'Ukraine vs Spain',
+      stadiumNames: ['NSC Olimpiyskiy', 'Camp Nou'],
     },
     {
-      playerName: 'Messi',
-      teamName: 'Bavaria',
+      matchName: 'Ukraine vs Germany',
+      stadiumNames: ['Arena Lviv', 'Signal Iduna Park'],
     },
     {
-      playerName: 'Berri',
-      teamName: 'Bavaria',
-    },
-    {
-      playerName: 'Shevchenko',
-      teamName: 'Dynamo Kyiv',
-    },
-    {
-      playerName: 'Yarmolenko',
-      teamName: 'Dymano Kyiv',
-    },
-    {
-      playerName: 'Miroshnichenko',
-      teamName: 'Dynamo Kyiv',
-    },
-    {
-      playerName: 'Pike',
-      teamName: 'Barselona',
-    },
-    {
-      playerName: 'Jerome',
-      teamName: 'Barselona',
+      matchName: 'Germany vs Spain',
+      stadiumNames: ['Allianz Arena', 'Santiago Bernabéu'],
     },
   ];
-  const equipmentData = [
+  const stadiumsData = [
     {
-      playerName: 'Pike',
-      equipment: ['white shirt', 'blue shoes'],
+      stadiumName: 'NSC Olimpiyskiy',
+      countryName: 'Ukraine',
+      matches: ['Ukraine vs Spain'],
+    },
+    { stadiumName: 'Metalist Stadium', countryName: 'Ukraine', matches: [] },
+    {
+      stadiumName: 'Arena Lviv',
+      countryName: 'Ukraine',
+      matches: ['Ukraine vs Germany'],
+    },
+    { stadiumName: 'Dnipro Stadium', countryName: 'Ukraine', matches: [] },
+    {
+      stadiumName: 'Camp Nou',
+      countryName: 'Spain',
+      matches: ['Ukraine vs Spain'],
     },
     {
-      playerName: 'Ronaldo',
-      equipment: ['blue shirt', 'white shoes'],
+      stadiumName: 'Santiago Bernabéu',
+      countryName: 'Spain',
+      matches: ['Germany vs Spain'],
+    },
+    { stadiumName: 'Metropolitano Stadium', countryName: 'Spain', matches: [] },
+    {
+      stadiumName: 'Signal Iduna Park',
+      countryName: 'Germany',
+      matches: ['Ukraine vs Germany'],
     },
     {
-      playerName: 'Messi',
-      equipment: ['dark shirt', 'yellow shoes'],
+      stadiumName: 'Allianz Arena',
+      countryName: 'Germany',
+      matches: ['Germany vs Spain'],
+    },
+    {
+      stadiumName: 'Olympiastadion Berlin',
+      countryName: 'Germany',
+      matches: [],
     },
   ];
-  // await Players.insertMany(playersData);
-  // console.log('data has been inserted to Players DB');
-  // await Teams.insertMany(teamsData);
-  // console.log('data has been inserted to Teams DB');
-  // await Equipments.insertMany(equipmentData);
-  // console.log('data has been inserted to Equipment DB:');
+  await Countries.insertMany(countriesData);
+  console.log('data has been inserted to Country DB');
+  await Stadiums.insertMany(stadiumsData);
+  console.log('data has been inserted to Stadiums DB');
+  await Matches.insertMany(matchesData);
+  console.log('data has been inserted to Matches DB:');
 })();
 
 require('./db');
@@ -125,6 +131,17 @@ app.get('/filter', async (request, response) => {
 
 app.get('/delete', async (request, response) => {
   let prop_name = request.query.prop;
+  if (request.query.name === 'countries') {
+    await Countries.remove({ [prop_name]: request.query.data });
+  } else if (request.query.name === 'stadiums') {
+    await Stadiums.remove({ [prop_name]: request.query.data });
+  } else if (request.query.name === 'matches') {
+    await Matches.remove({ [prop_name]: request.query.data });
+  }
+  console.log(request.query);
+});
+
+app.get('/insert', async (request, response) => {
   if (request.query.name === 'countries') {
     await Countries.remove({ [prop_name]: request.query.data });
   } else if (request.query.name === 'stadiums') {
