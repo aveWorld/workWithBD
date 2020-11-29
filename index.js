@@ -2,84 +2,70 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
-const Countries = require('./models/Countries');
-const Stadiums = require('./models/Stadiums');
-const Matches = require('./models/Matches');
+const Teams = require('./models/Teams');
+const Players = require('./models/Players');
+const Equipments = require('./models/Equipments');
 
 (async function () {
-  const countriesData = [
-    { name: 'Ukraine' },
-    { name: 'Spain' },
-    { name: 'Germany' },
+  const teamsData = [
+    { teamName: 'Dynamo Kyiv' },
+    { teamName: 'Barselona' },
+    { teamName: 'Bavaria' },
   ];
-  const matchesData = [
+  const playersData = [
     {
-      matchName: 'Ukraine vs Spain',
-      stadiumNames: ['NSC Olimpiyskiy', 'Camp Nou'],
+      playerName: 'Ronaldo',
+      teamName: 'Bavaria',
     },
     {
-      matchName: 'Ukraine vs Germany',
-      stadiumNames: ['Arena Lviv', 'Signal Iduna Park'],
+      playerName: 'Messi',
+      teamName: 'Bavaria',
     },
     {
-      matchName: 'Germany vs Spain',
-      stadiumNames: ['Allianz Arena', 'Santiago Bernabéu'],
-    },
-  ];
-  const stadiumsData = [
-    {
-      stadiumName: 'NSC Olimpiyskiy',
-      countryName: 'Ukraine',
-      matches: ['Ukraine vs Spain'],
-    },
-    { stadiumName: 'Metalist Stadium', countryName: 'Ukraine', matches: [] },
-    {
-      stadiumName: 'Arena Lviv',
-      countryName: 'Ukraine',
-      matches: ['Ukraine vs Germany'],
-    },
-    { stadiumName: 'Dnipro Stadium', countryName: 'Ukraine', matches: [] },
-    {
-      stadiumName: 'Camp Nou',
-      countryName: 'Spain',
-      matches: ['Ukraine vs Spain'],
+      playerName: 'Berri',
+      teamName: 'Bavaria',
     },
     {
-      stadiumName: 'Santiago Bernabéu',
-      countryName: 'Spain',
-      matches: ['Germany vs Spain'],
-    },
-    { stadiumName: 'Metropolitano Stadium', countryName: 'Spain', matches: [] },
-    {
-      stadiumName: 'Signal Iduna Park',
-      countryName: 'Germany',
-      matches: ['Ukraine vs Germany'],
+      playerName: 'Shevchenko',
+      teamName: 'Dynamo Kyiv',
     },
     {
-      stadiumName: 'Allianz Arena',
-      countryName: 'Germany',
-      matches: ['Germany vs Spain'],
+      playerName: 'Yarmolenko',
+      teamName: 'Dymano Kyiv',
     },
     {
-      stadiumName: 'Olympiastadion Berlin',
-      countryName: 'Germany',
-      matches: [],
+      playerName: 'Miroshnichenko',
+      teamName: 'Dynamo Kyiv',
+    },
+    {
+      playerName: 'Pike',
+      teamName: 'Barselona',
+    },
+    {
+      playerName: 'Jerome',
+      teamName: 'Barselona',
     },
   ];
-  await Countries.insertMany(countriesData);
-  console.log('data has been inserted to Country DB');
-  await Stadiums.insertMany(stadiumsData);
-  console.log('data has been inserted to Stadiums DB');
-  await Matches.insertMany(matchesData);
-  console.log('data has been inserted to Matches DB\n\n');
-  console.log('All stadiums in Ukraine: \n');
-  const ukraineStadiums = await Stadiums.find(
-    { countryName: 'Ukraine' },
-    (err, result) => {
-      console.log(result);
-    }
-  );
-  console.log(ukraineStadiums);
+  const equipmentData = [
+    {
+      playerName: 'Pike',
+      equipment: ['white shirt', 'blue shoes'],
+    },
+    {
+      playerName: 'Ronaldo',
+      equipment: ['blue shirt', 'white shoes'],
+    },
+    {
+      playerName: 'Messi',
+      equipment: ['dark shirt', 'yellow shoes'],
+    },
+  ];
+  await Players.insertMany(playersData);
+  console.log('data has been inserted to Players DB');
+  await Teams.insertMany(teamsData);
+  console.log('data has been inserted to Teams DB');
+  await Equipments.insertMany(equipmentData);
+  console.log('data has been inserted to Equipment DB:');
 })();
 
 require('./db');
