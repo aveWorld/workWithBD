@@ -186,8 +186,8 @@
                     }
                 },
                 async editProp(index) {
-                    this.table.data['countries'][index].name = this.edit_input[index]
                     const response = await axios.get(`http://localhost:3000/edit?old_name=${this.table.data['countries'][index].name}&name=${this.edit_input[index]}`)
+                    this.table.data.countries.[index].name = this.edit_input[index]
                 },
                 async addProp(table_name) {
                     this.table.data[table_name].push({name: this.insert_inputs})
