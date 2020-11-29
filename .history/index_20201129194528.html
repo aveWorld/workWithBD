@@ -54,8 +54,8 @@
                 <tr v-for="(country, index) in table.data.countries">
                     <td>
                         <span>{{country.name}}</span>
-                        <input type="text" v-model="edit_input[index]">
-                        <button @click="editProp(index)" class="edit_btns">Edit</button>
+                        <input type="text" v-model="edit_input">
+                        <button @click="editProp()" class="edit_btns">Edit</button>
                         <button @click="deleteProp('countries', 'name', country.name, index)" class="edit_btns">-</button>
                     </td>
                 </tr>
@@ -155,7 +155,7 @@
                 table: {},
                 inputs: [],
                 insert_inputs: '',
-                edit_input: []
+                edit_input: ''
             },
             async created() {
                 this.table = await axios.get('http://localhost:3000/data')
@@ -185,9 +185,9 @@
                         this.table.data.matches = response.data
                     }
                 },
-                async editProp(index) {
+                async editProp() {
                     // this.table.data[table_name].push({name: this.insert_inputs})
-                    const response = await axios.get(`http://localhost:3000/edit?name=${this.edit_input[index]}`)
+                    const response = await axios.get(`http://localhost:3000/edit?name=${this.edit_input}`)
                 },
                 async addProp(table_name) {
                     this.table.data[table_name].push({name: this.insert_inputs})
