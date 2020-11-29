@@ -60,9 +60,9 @@
                 </tr>
             </tbody>
         </table>
-        <div style="text-align: center; margin-bottom: 20px;">
-            <input type="text" v-model="insert_inputs">
-            <button @click="addProp('countries')">+</button>
+        <div style="margin-bottom: 20px;">
+            <input type="text" v-model="insert_inputs[0]">
+            <button @click="addProp('matches')">+</button>
         </div>
 
         <table>
@@ -153,7 +153,7 @@
             data: {
                 table: {},
                 inputs: [],
-                insert_inputs: ''
+                insert_inputs: []
             },
             async created() {
                 this.table = await axios.get('http://localhost:3000/data')
@@ -187,8 +187,8 @@
 
                 },
                 async addProp(table_name) {
-                    this.table.data[table_name].push({name: this.insert_inputs})
-                    const response = await axios.get(`http://localhost:3000/insert?name=${table_name}&name=${this.insert_inputs}`)
+                    this.table.data[table_name].push({name: insert_inputs[0]})
+                    const response = await axios.get(`http://localhost:3000/insert?name=${table_name}&name=${this.insert_inputs[0]}`)
                 },
                 async deleteProp(table_name, prop, data, index) {
                     this.table.data[table_name].splice(index, 1)
