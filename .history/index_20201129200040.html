@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 1</title>
+    <style>
+        table {
+            margin-bottom: 20px;
+            width: 100%;
+            text-align: left;
+            border-top: 2px solid #000000;
+            border-bottom: 2px solid #000000;
+        }
+        thead th {
+            font-size: 24px;
+            border-bottom: 1px solid rgba(0,0,0,0.5);
+        }
+        th, td {
+            padding: 10px 30px;
+            border-right: 2px solid #000000;
+            border-left: 2px solid #000000;
+        }
+        .edit_btns {
+            display: none;
+        }
+        td:hover {
+            background-color: rgba(255,255,255,0.6);
+            box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.6);
+        }
+        td:hover .edit_btns {
+            display: inline;
+            cursor: pointer;
+        }
+        button {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app_basic">
+        <table>
+            <thead>
+                <th>
+                    <span>Name</span>
+                    <button @click="sort('countries', 'name', 1)">Asc</button><button @click="sort('countries', 'name', -1)">Desc</button>
+                    <input type="text" v-model="inputs[0]">
+                    <button @click="filter('countries', 'name', 0)">Filter</button>
+                </th>
+            </thead>
+            <tbody>
+                <tr v-for="(country, index) in table.data.countries">
+                    <td>
+                        <span>{{country.name}}</span>
+                        <input type="text" v-model="edit_input[index]">
+                        <button @click="editProp(index)" class="edit_btns">Edit</button>
+                        <button @click="deleteProp('countries', 'name', country.name, index)" class="edit_btns">-</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="text-align: center; margin-bottom: 20px;">
+            <input type="text" v-model="insert_inputs">
+            <button @click="addProp('countries')">+</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        <span>StadiumNames</span>
+                        <button @click="sort('matches', 'stadiumNames', 1)">Asc</button><button @click="sort('matches', 'stadiumNames', -1)">Desc</button>
+                        <input type="text" v-model="inputs[1]">
+                        <button @click="filter('matches', 'stadiumNames', 1)">Filter</button>
+                    </th>
+                    <th>
+                        <span>MatchName</span>
+                        <button @click="sort('matches', 'matchName', 1)">Asc</button><button @click="sort('matches', 'matchName', -1)">Desc</button>
+                        <input type="text" v-model="inputs[2]">
+                        <button @click="filter('matches', 'matchName', 2)">Filter</button>
+                        <button @click="addProp()" class="edit_btns">+</button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(match, index) in table.data.matches">
+                    <td>
+                        <span>{{match.stadiumNames}}</span>
+                        <button @click="editProp()" class="edit_btns">Edit</button>
+                        <button @click="deleteProp('matches', 'stadiumNames', match.stadiumNames, index)" class="edit_btns">-</button>
+                    </td>
+                    <td>
+                        <span>{{match.matchName}}</span>
+                        <button @click="editProp()" class="edit_btns">Edit</button>
+                        <button @click="deleteProp('matches', 'matchName', match.matchName, index)" class="edit_btns">-</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        <span>Matches</span>
+                        <button @click="sort('stadiums', 'matches', 1)">Asc</button><button @click="sort('stadiums', 'matches', -1)">Desc</button>
+                        <input type="text" v-model="inputs[3]">
+                        <button @click="filter('stadiums', 'matches', 3)">Filter</button>
+                        <button @click="addProp()" class="edit_btns">+</button>
+                    </th>
+                    <th>
+                        <span>StadiumName</span>
+                        <button @click="sort('stadiums', 'stadiumName', 1)">Asc</button><button @click="sort('stadiums', 'stadiumName', -1)">Desc</button>
+                        <input type="text" v-model="inputs[4]">
+                        <button @click="filter('stadiums', 'stadiumName', 4)">Filter</button>
+                        <button @click="addProp()" class="edit_btns">+</button>
+                    </th>
+                    <th>
+                        <span>CountryName</span>
+                        <button @click="sort('stadiums', 'countryName', 1)">Asc</button><button @click="sort('stadiums', 'countryName', -1)">Desc</button>
+                        <input type="text" v-model="inputs[5]">
+                        <button @click="filter('stadiums', 'countryName', 5)">Filter</button>
+                        <button @click="addProp()" class="edit_btns">+</button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="stadium in table.data.stadiums">
+                    <td>
+                        <span>{{stadium.matches}}</span>
+                        <button @click="editProp()" class="edit_btns">Edit</button>
+                        <button @click="deleteProp('stadiums', 'matches', stadium.matches, index)" class="edit_btns">-</button>
+                    </td>
+                    <td>
+                        <span>{{stadium.stadiumName}}</span>
+                        <button @click="editProp()" class="edit_btns">Edit</button>
+                        <button @click="deleteProp('stadiums', 'stadiumName', stadium.stadiumName, index)" class="edit_btns">-</button>
+                    </td>
+                    <td>
+                        <span>{{stadium.countryName}}</span>
+                        <button @click="editProp()" class="edit_btns">Edit</button>
+                        <button @click="deleteProp('stadiums', 'countryName', stadium.countryName, index)" class="edit_btns">-</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        new Vue(
+        {
+            el: '#app_basic',
+            data: {
+                table: {},
+                inputs: [],
+                insert_inputs: '',
+                edit_input: []
+            },
+            async created() {
+                this.table = await axios.get('http://localhost:3000/data')
+            },
+            methods: {
+                async sort(table_name, sort_name, asc) {
+                    if(table_name === 'countries') {
+                        const response = await axios.get(`http://localhost:3000/sort?name=${table_name}&sort_name=${sort_name}&sort_by_asc=${asc}`)
+                        this.table.data.countries = response.data
+                    } else if(table_name === 'stadiums') {
+                        const response = await axios.get(`http://localhost:3000/sort?name=${table_name}&sort_name=${sort_name}&sort_by_asc=${asc}`)
+                        this.table.data.stadiums = response.data
+                    } else if(table_name === 'matches') {
+                        const response = await axios.get(`http://localhost:3000/sort?name=${table_name}&sort_name=${sort_name}&sort_by_asc=${asc}`)
+                        this.table.data.matches = response.data
+                    }
+                },
+                async filter(table_name, sort_name, index) {
+                    if(table_name === 'countries') {
+                        const response = await axios.get(`http://localhost:3000/filter?name=${table_name}&sort_name=${sort_name}&input=${this.inputs[index]}`)
+                        this.table.data.countries = response.data
+                    } else if(table_name === 'stadiums') {
+                        const response = await axios.get(`http://localhost:3000/filter?name=${table_name}&sort_name=${sort_name}&input=${this.inputs[index]}`)
+                        this.table.data.stadiums = response.data
+                    } else if(table_name === 'matches') {
+                        const response = await axios.get(`http://localhost:3000/filter?name=${table_name}&sort_name=${sort_name}&input=${this.inputs[index]}`)
+                        this.table.data.matches = response.data
+                    }
+                },
+                async editProp(index) {
+                    const response = await axios.get(`http://localhost:3000/edit?old_name=${this.table.data['countries'][index].name}&name=${this.edit_input[index]}`)
+                    console.log(this.table.data.countries[index])
+                    this.table.data.countries[index].name = this.edit_input[index]
+                    console.log(this.table.data.countries[index])
+                },
+                async addProp(table_name) {
+                    this.table.data[table_name].push({name: this.insert_inputs})
+                    const response = await axios.get(`http://localhost:3000/insert?name=${this.insert_inputs}`)
+                },
+                async deleteProp(table_name, prop, data, index) {
+                    this.table.data[table_name].splice(index, 1)
+                    const response = await axios.get(`http://localhost:3000/delete?name=${table_name}&prop=${prop}&data=${data}`)
+                }
+            }
+        })
+    </script>
+</body>
+</html>
