@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +13,9 @@
   "dependencies": {
     "axios": "^0.21.0",
     "express": "^4.17.1",
-    "mongoose": "^5.10.17"
+    "migrate-mongo": "^8.1.4",
+    "moment": "^2.29.1",
+    "mongoose": "^5.10.17",
+    "nodemon": "^2.0.6"
   }
 }

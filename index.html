@@ -7,6 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lab 1</title>
     <style>
+      .error {
+        color: red;
+        padding-left: 20px;
+      }
       table {
         margin-bottom: 20px;
         width: 100%;
@@ -68,6 +72,7 @@
           </tr>
         </tbody>
       </table>
+      <span class="error">{{error_msg}}</span>
       <div style="text-align: center; margin-bottom: 20px">
         <input type="text" v-model="insert_inputs" />
         <button @click="addProp('countries')">+</button>
@@ -204,6 +209,7 @@
           inputs: [],
           insert_inputs: '',
           edit_input: [],
+          error_msg: '',
         },
         async created() {
           this.table = await axios.get('http://localhost:3000/data');
@@ -246,12 +252,35 @@
             }
           },
           async editProp(index) {
+            if (
+              this.insert_inputs.length < 4 ||
+              this.insert_inputs.length > 32
+            ) {
+              this.error_msg = 'Correct Name characters length > 4 and < 32.';
+              return;
+            }
+            if (!/^[a-zA-Z]+$/.test(this.insert_inputs)) {
+              this.error_msg = 'Only English letters allowed.';
+              return;
+            }
             const response = await axios.get(
               `http://localhost:3000/edit?old_name=${this.table.data['countries'][index].name}&name=${this.edit_input[index]}`
             );
             this.table.data.countries[index].name = this.edit_input[index];
           },
           async addProp(table_name) {
+            if (
+              this.insert_inputs.length < 4 ||
+              this.insert_inputs.length > 32
+            ) {
+              this.error_msg = 'Correct Name characters length > 4 and < 32.';
+              return;
+            }
+            if (!/^[a-zA-Z]+$/.test(this.insert_inputs)) {
+              this.error_msg = 'Only English letters allowed.';
+              return;
+            }
+            console.log(this.insert_inputs.length);
             this.table.data[table_name].push({ name: this.insert_inputs });
             const response = await axios.get(
               `http://localhost:3000/insert?name=${this.insert_inputs}`

@@ -142,7 +142,8 @@ app.get('/delete', async (request, response) => {
 });
 
 app.get('/insert', async (request, response) => {
-  let countryName = request.query.name[1];
+  console.log(request.query.name);
+  let countryName = request.query.name;
   Countries.insertMany({ name: countryName });
 });
 
